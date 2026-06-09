@@ -1,0 +1,14 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Kubernetes secrets
+docker-secret.yaml
+
+# Python
+__pycache__/
+*.pyc
+
+# Mac
+.DS_Store

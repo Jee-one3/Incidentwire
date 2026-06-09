@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-engine
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: incident-engine
+  template:
+    metadata:
+      labels:
+        app: incident-engine
+    spec:
+      serviceAccountName: incident-engine
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: engine
+          image: jeeone3/jeevan_images:incidentwire
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DEFAULT_NAMESPACE
+              value: monitoring
+            # For EKS: point this at an in-cluster Ollama service or an external LLM endpoint.
+            # host.docker.internal only works on Docker Desktop, not on AWS EKS.
+            - name: OLLAMA_URL
+              value: "http://host.docker.internal:11434"
+            - name: OLLAMA_MODEL
+              value: llama3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20

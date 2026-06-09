@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-alerts
+  namespace: monitoring-stack
+  labels:
+    release: monitoring
+spec:
+  groups:
+  - name: custom.rules
+    rules:
+
+    - alert: HighCPUUsage
+      expr: sum by (namespace, pod) (rate(container_cpu_usage_seconds_total{namespace="monitoring", container!=""}[1m])) > 0.01
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High CPU usage on {{ $labels.pod }}"
+        description: "CPU usage is above threshold for pod {{ $labels.pod }} in {{ $labels.namespace }}"
+
+    - alert: PodRestarting
+      expr: increase(kube_pod_container_status_restarts_total{namespace="monitoring"}[5m]) > 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod {{ $labels.pod }} restarting frequently"
+        description: "Pod {{ $labels.pod }} in {{ $labels.namespace }} restarted more than once in 5 minutes"

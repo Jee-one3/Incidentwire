@@ -1,0 +1,13 @@
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+
+    route:
+      receiver: 'incident-engine'
+      repeat_interval: 1m
+
+    receivers:
+    - name: 'incident-engine'
+      webhook_configs:
+      - url: 'http://incident-engine.monitoring.svc.cluster.local:5000/webhook'

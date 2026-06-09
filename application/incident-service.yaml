@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: incident-engine
+  namespace: monitoring
+spec:
+  selector:
+    app: incident-engine
+  ports:
+  - port: 5000
+    targetPort: 5000

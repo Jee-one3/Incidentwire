@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  namespace: monitoring
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: my-app
+        image: jeeone3/jeevan_images:yamahaserver
+        ports:
+        - containerPort: 80
