@@ -55,7 +55,7 @@ Instead of just notifying engineers, the system:
 
 ## Architecture
 
-
+![IncidentWire Architecture](application/incidentwire.jpeg)
 ---
 
 ## Technology Stack
